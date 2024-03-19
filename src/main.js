@@ -2,18 +2,17 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
-import router from './router'
-import './index.css'
+import router from './router/index.js'
+import './styles/index.css'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
-import { faMagnifyingGlass, faHeart as solidHeart, faStar } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faHeart, faUser, faMagnifyingGlass, solidHeart, faStar)
+import { initFontawesome } from '@/plugins/fontawesome.js'
+import {initPaginate} from "@/plugins/paginate.js";
+import {initGoogleLogin} from "@/plugins/googleLogin.js";
 
 const app = createApp(App)
 app.use(router)
 app.use(createPinia())
-app.component('FontAwesomeIcon', FontAwesomeIcon)
+initPaginate(app)
+initFontawesome(app)
+initGoogleLogin(app)
 app.mount('#app')

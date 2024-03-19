@@ -7,5 +7,5 @@
 @tailwind utilities;
 
 body {
-    @apply bg-off-white font-montserrat text-darkblue text-base;
+    @apply bg-white-800 font-montserrat text-darkblue text-base;
 }

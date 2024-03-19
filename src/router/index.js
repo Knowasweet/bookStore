@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import NotFound from "@/views/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +14,7 @@ const router = createRouter({
       path: '/books',
       name: 'Search',
       component: () => import('/src/views/Search.vue'),
-      props: (route) => ({ searchQuery: route.query.search_query }),
+      props: (route) => ({ searchQuery: route.query.search_query, page: route.query.page}),
     },
     {
       path: '/books/:id',
@@ -22,9 +23,14 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/profile/liked',
+      name: 'LikedBooks',
+      component: () => import('/src/views/LikedBooks.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: () => import('/src/views/NotFound.vue'),
+      component: NotFound,
     },
   ],
 })

@@ -1,3 +1,3 @@
-export const randomIntBetweenZeroAndTwo = () => {
-  return Math.floor(Math.random() * 3)
+export const randomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
 }

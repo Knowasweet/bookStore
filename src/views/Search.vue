@@ -1,159 +1,67 @@
 <template>
-  <div class="mb-[68px] mt-[79px]">
-    <Swiper
-      v-if="books.length > 0"
-      :pagination="pagination"
-      :modules="[Pagination]"
-      class="mySwiper ml-[67px] mr-[65px]"
-    >
-      <SwiperSlide>
-        <div class="grid grid-cols-3 grid-rows-4 gap-x-[10px] gap-y-[58px] pb-[96px]">
-          <div
-            v-for="(book, index) in books"
-            :key="index"
-            class="flex gap-[21.85px] rounded-[8px] border-[1px] border-transparent py-[9px] pl-[15.06px] pr-[15.63px] hover:border-x-lightgray hover:border-b-lightgray hover:shadow-[0px_12.5px_10px_-10px] hover:shadow-gray"
-          >
-            <RouterLink :to="{ name: 'BookDetails', params: { id: book.id } }">
-              <img
-                :src="`https://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1`"
-                :alt="`book-${index}`"
-                class="h-[209px] w-[170.87px] rounded-[5px]"
-              />
-            </RouterLink>
-            <div class="mt-[50px] flex w-[203.92px] flex-col justify-between">
-              <div class="space-y-[15px]">
-                <RouterLink :to="{ name: 'BookDetails', params: { id: book.id } }">
-                  <h5 class="line-clamp-1 text-xs-small">
-                    {{ book.volumeInfo.title }}
-                  </h5>
-                </RouterLink>
-                <div class="line-clamp-4 font-nunito text-xxs-small opacity-[52%]">
-                  {{ book.volumeInfo.description }}
-                </div>
-              </div>
-              <div class="mr-[32.7px] self-end">
-                <button
-                  class="group flex h-[40px] w-[40px] items-center justify-center rounded-full border-[1px] border-lightgray/90 bg-transparent"
-                >
-                  <FontAwesomeIcon
-                    :icon="['fas', 'heart']"
-                    class="group-active:text-red-800 h-[20.06px] w-[23.41px] text-darkblue/60 group-hover:text-red"
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </SwiperSlide>
-      <!--copy-->
-      <SwiperSlide>
-        <div class="grid grid-cols-3 grid-rows-4 gap-x-[10px] gap-y-[58px]">
-          <div
-            v-for="(book, index) in books"
-            :key="index"
-            class="flex gap-[21.85px] rounded-[8px] border-[1px] border-transparent py-[9px] pl-[15.06px] pr-[15.63px] hover:border-x-lightgray hover:border-b-lightgray hover:shadow-[0px_12.5px_10px_-10px] hover:shadow-gray"
-          >
-            <RouterLink :to="{ name: 'BookDetails', params: { id: book.id } }">
-              <img
-                :src="`https://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1`"
-                :alt="`book-${index}`"
-                class="h-[209px] w-[170.87px] rounded-[5px]"
-              />
-            </RouterLink>
-            <div class="mt-[50px] flex w-[203.92px] flex-col justify-between">
-              <div class="space-y-[15px]">
-                <RouterLink :to="{ name: 'BookDetails', params: { id: book.id } }">
-                  <h5 class="line-clamp-1 text-xs-small">
-                    {{ book.volumeInfo.title }}
-                  </h5>
-                </RouterLink>
-                <div class="line-clamp-4 font-nunito text-xxs-small opacity-[52%]">
-                  {{ book.volumeInfo.description }}
-                </div>
-              </div>
-              <div class="mr-[32.7px] self-end">
-                <button
-                  class="group flex h-[40px] w-[40px] items-center justify-center rounded-full border-[1px] border-lightgray/90 bg-transparent"
-                >
-                  <FontAwesomeIcon
-                    :icon="['fas', 'heart']"
-                    class="group-active:text-red-800 h-[20.06px] w-[23.41px] text-darkblue/60 group-hover:text-red"
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </SwiperSlide>
-    </Swiper>
-    <div
-      v-else
-      class="mx-auto line-clamp-3 w-[500px] overflow-hidden text-center text-6xl text-yellow"
-    >
-      No books on request {{ searchQuery }}
+  <div class="mb-[68px] mt-[79px] ml-[67px] mr-[65px]">
+    <div class="grid grid-cols-3 grid-rows-4 gap-x-[10px] gap-y-[58px] pb-[64px]">
+        <BookCard v-for="(book, index) in books"
+                        :key="index" :book="book"/>
     </div>
+    <Paginate
+        v-model="currentPage"
+        :pageCount="totalPages"
+        :page-range="3"
+        :margin-pages="3"
+        :clickHandler="changeCurrentPage"
+        :prevText="'<'"
+        :nextText="'>'"
+        :container-class="'flex gap-[8px] justify-center text-lightgray'"
+        :page-class="'w-[32px] h-[32px] !bg-transparent border-[1px] border-lightgray rounded-[4px] justify-center flex items-center font-bold text-s text-darkblue'"
+        :prev-link-class="'w-[32px] h-[32px] bg-transparent border-[1px] border-lightgray rounded-[4px] justify-center flex items-center text-s font-bold  '"
+        :next-link-class="'w-[32px] h-[32px] bg-transparent border-[1px] border-lightgray rounded-[4px] justify-center flex items-center text-s font-bold'"
+        :active-class="'!border-orange !text-orange'"
+        :disabled-class="'bg-lightgray rounded-[4px] text-white'"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import axios from 'axios'
+import BookCard from "@/components/BookCard.vue";
+import {computed, ref, watch} from 'vue'
+import {getSearchBooks, getTotalBooks} from "@/api/books.js";
+import router from "@/router/index.js";
 
 const props = defineProps({
   searchQuery: {
     type: String,
     required: true,
   },
+  page: {
+    type: Number,
+    required: true,
+  }
 })
+
 
 const books = ref([])
+const currentPage = ref(parseInt(props.page))
+const pageSize = 12
+const totalItems = ref(0)
+const totalPages = computed(() => Math.ceil(totalItems.value / 12))
 
-const getSearchQuery = async (searchValue) => {
-  axios
-    .get(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchValue}+inauthor&startIndex=0&maxResults=12`,
-    )
-    .then((response) => (response.data.totalItems ? (books.value = response.data.items) : ''))
-    .catch((error) => console.error('Error in search books data:', error))
+const getBooksByPage = (page) => getSearchBooks(props.searchQuery, (page - 1) * 12, pageSize, books)
+
+const changeCurrentPage = () => {
+  router.push({path: '/books', query: {search_query: props.searchQuery, page: currentPage.value}})
+  getBooksByPage(currentPage.value)
 }
+
+await getTotalBooks(props.searchQuery, totalItems)
+await getBooksByPage(currentPage.value)
 
 watch(
-  () => props.searchQuery,
-  (updatedSearchQuery) => {
-    getSearchQuery(updatedSearchQuery)
-  },
+    () => props.searchQuery,
+    (updatedSearchQuery) => {
+      currentPage.value = 1
+      getBooksByPage(currentPage.value)
+    },
 )
 
-onMounted(() => {
-  getSearchQuery(props.searchQuery)
-})
-
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import 'swiper/css'
-import 'swiper/css/pagination'
-import { Pagination } from 'swiper/modules'
-
-const pagination = {
-  clickable: true,
-  renderBullet: function (index, className) {
-    return '<span class="' + className + '">' + (index + 1) + '</span>'
-  },
-}
 </script>
-
-<style>
-.swiper-pagination-bullet {
-  @apply text-orange border-orange h-[32px] w-[32px] rounded-none border-[1px] bg-transparent leading-[32px];
-}
-
-.swiper-pagination-fraction,
-.swiper-pagination-custom,
-.swiper-horizontal > .swiper-pagination-bullets,
-.swiper-pagination-bullets.swiper-pagination-horizontal {
-  @apply bottom-0;
-}
-
-.swiper-pagination-bullet-active {
-  @apply bg-orange text-white;
-}
-</style>
