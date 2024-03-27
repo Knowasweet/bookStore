@@ -1,11 +1,11 @@
 <template>
-  <footer class="border-t-[0.7px] border-t-darkblue/10">
+  <footer class="border-t-[1px] border-t-darkblue/10">
     <div class="container mx-auto">
-      <nav class="text-md mx-[100px] mb-[20px] mt-[21px] flex items-center gap-[46px] font-nunito">
-        <a href="#" target="_blank">Privacy Policy</a>
-        <a href="#" target="_blank">Terms of Use</a>
-        <a href="#" target="_blank">Sales and Refunds</a>
-        <a href="#" target="_blank">Legal</a>
+      <nav class="mx-[100px] mb-5 mt-5 flex items-center gap-[46px] font-nunito text-md">
+        <a href="#" target="_blank" class="hover:underline">Privacy Policy</a>
+        <a href="#" target="_blank" class="hover:underline">Terms of Use</a>
+        <a href="#" target="_blank" class="hover:underline">Sales and Refunds</a>
+        <a href="#" target="_blank" class="hover:underline">Legal</a>
       </nav>
     </div>
   </footer>

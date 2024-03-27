@@ -6,8 +6,8 @@ import router from './router/index.js'
 import './styles/index.css'
 
 import { initFontawesome } from '@/plugins/fontawesome.js'
-import {initPaginate} from "@/plugins/paginate.js";
-import {initGoogleLogin} from "@/plugins/googleLogin.js";
+import { initPaginate } from '@/plugins/paginate.js'
+import { initGoogleLogin } from '@/plugins/googleLogin.js'
 
 const app = createApp(App)
 app.use(router)

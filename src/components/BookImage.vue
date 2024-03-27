@@ -2,7 +2,7 @@
   <img
     :src="`https://books.google.com/books/content?id=${id}&printsec=frontcover&img=1`"
     :alt="`book-${id}`"
-    class="rounded-[3px]"
+    class="rounded-[3px] object-contain"
   />
 </template>
 

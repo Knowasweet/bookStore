@@ -1,17 +1,17 @@
 <template>
-  <RouterView v-slot="{ Component }">
+  <RouterView #default="{ Component }">
     <template v-if="Component">
       <Suspense>
         <div>
           <div class="container mx-auto">
-            <Header/>
-            <component :is="Component"/>
+            <Header />
+            <component :is="Component" />
           </div>
-          <Footer/>
+          <Footer />
         </div>
         <template #fallback>
-          <NotFound v-if="error" :title="error"/>
-          <Loading v-else/>
+          <NotFound v-if="error" :title="error" />
+          <Loading v-else />
         </template>
       </Suspense>
     </template>
@@ -21,15 +21,14 @@
 <script setup>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import Loading from "@/components/Loading.vue";
-import NotFound from "@/views/NotFound.vue";
+import NotFound from '@/views/NotFound.vue'
+import Loading from '@/components/Loading.vue'
 
-import {onErrorCaptured, ref} from "vue";
-
+import { onErrorCaptured, ref } from 'vue'
 
 const error = ref(null)
 
-onErrorCaptured((err) => {
-  error.value = "Sorry, something went wrong"
+onErrorCaptured((e) => {
+  error.value = e
 })
 </script>

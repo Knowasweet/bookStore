@@ -1,5 +1,8 @@
 <template>
   <div
+    v-if="
+      user.value.books && user.value.books.some((favoriteBook) => favoriteBook.id === props.book.id)
+    "
     class="flex gap-[22px] rounded-lg border-[1px] border-transparent py-[9px] pl-[15px] pr-4 hover:border-lightgray hover:shadow-[0px_12px_10px_-10px] hover:shadow-gray"
   >
     <RouterLink :to="{ name: 'BookDetails', params: { id: book.id } }">
@@ -25,7 +28,7 @@
             :icon="['fas', 'heart']"
             class="h-5 w-6"
             :class="
-              user && user.books && user.books.some((favoriteBook) => favoriteBook.id === book.id)
+              user.books.some((favoriteBook) => favoriteBook.id === book.id)
                 ? 'text-red group-hover:text-red-800/60 group-active:text-red-800'
                 : 'text-darkblue/60 group-hover:text-red group-active:text-red-800'
             "
